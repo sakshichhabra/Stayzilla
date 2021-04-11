@@ -1,0 +1,66 @@
+{% load static %}
+{% load staticfiles %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include 'base/css.html' %}
+    {% include 'base/js.html' %}
+
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+           Title
+        {% endblock %}
+    </title>
+
+    {% block scripts %}
+    {% endblock %}
+    {% block stylesheets %}
+    {% endblock %}
+</head>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <a class="navbar-brand" href="{% url "search:search" %}"><img src={% static "images/logo.png" %} height="34"> </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    {% block navbar_title %}
+            <p class="navbar-nav mr-auto text-white lead">Title</p>
+    {% endblock %}
+    <ul class="navbar-nav navbar-right">
+
+        <li class="nav-item dropdown">
+        <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src={% static "images/user.png" %} width="34 height="34">
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <label class="ml-4">
+              {% if user %}
+                 Hey, {{ user.first_name }}
+              {% else %}
+                  Unknown
+              {% endif %}
+          </label>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url "accounts:signout" %}">Sign Out</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid">
+     {% block content %}
+     {% endblock %}
+
+
+    {% block alert %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

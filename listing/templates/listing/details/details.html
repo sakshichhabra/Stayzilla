@@ -1,0 +1,250 @@
+{% extends "listing/base/base.html" %}
+
+{% load static %}
+
+{% block scripts %}
+    {% include 'listing/details/js.html' %}
+{% endblock %}
+
+{% block navbar_title %}
+    <p class="navbar-nav mr-auto text-white lead">{{ listing.name }}, {{ listing.street }}</p>
+{% endblock %}
+
+{% block content %}
+<div class="price-trend nav-scroller shadow row justify-content-center align-items-center">
+    <div class="col" id="past_price_trend_container">
+    </div>
+    <div class="col-1 text-center">
+        <p><strong>Weekly<br/>Price<br/>Trend</strong></p>
+    </div>
+    <div class="col" id="future_price_trend_container">
+    </div>
+</div>
+<div class="row m-3">
+    <div class="col">
+        <div class="row mt-1">
+            <div class="col-4">
+                <div class="card shadow-sm">
+                    <img class="card-img" src="{{ listing.picture_url }}">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card shadow-sm">
+                    <img class="card-img" src="https://i.pinimg.com/originals/26/b3/c7/26b3c75f0db2991d7f795f6b9a8c2fc5.jpg">
+                </div>
+            </div>
+             <div class="col-4">
+                <div class="card shadow-sm">
+                    <img class="card-img" src="https://activerain-store.s3.amazonaws.com/image_store/uploads/4/5/8/1/3/ar132114701131854.jpg">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <div>
+                    {% for i in i|rjust:5 %}
+                        {% if forloop.counter <= listing.score %}
+                            <span class="fa fa-star checked fa-2x"></span>
+                        {% else %}
+                            <span class="fa fa-star fa-2x"></span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col">
+                         <div class="float-right">
+                             <span class="text-center"> {{ listing.host_name }} <i class="fa fa-user-circle fa-2x ml-2"></i> </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                         <div class="float-right">
+                            <a href="mailto:{{ listing.host_contact }}?subject=Interested%20In%20Listing&body=" class="text-center"> {{ listing.host_contact }} </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row mt-3 ml-1">
+            <span class="text-justify">
+               {{ listing.formatted_description }}
+            </span>
+        </div>
+    </div>
+    <div class="col-3 ml-3" >
+    <div class="card" style="background-color: gray">
+            <form id="booking_form" action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ booking_form.listing_id }}
+        {{ booking_form.customer_id }}
+        {{ booking_form.price }}
+
+        <div class="card-body">
+            <div class="row">
+           <div class="col text-white">
+               Check-In
+           </div>
+           </div>
+            <div class="row mt-2 mb-2">
+               <div class="col text-center">
+                   <div class="input-group date">
+                   {{ booking_form.check_in }}
+                    <div class="input-group-addon input-group-append" id="check-in-div">
+                        <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                    </div>
+                </div>
+               </div>
+           </div>
+            <div class="row">
+           <div class="col text-white">
+               Check-Out
+           </div>
+           </div>
+            <div class="row mt-2 mb-2">
+               <div class="col text-center">
+                   <div class="input-group date">
+                   {{ booking_form.check_out }}
+                    <div class="input-group-addon input-group-append" id="check-out-div">
+                        <div class="input-group-text"><i class="glyphicon glyphicon-calendar"></i></div>
+                    </div>
+                </div>
+               </div>
+           </div>
+            <div class="row">
+               <div class="col text-white">
+                   Number of guests
+               </div>
+           </div>
+            <div class="row mt-2">
+               <div class="col">
+                   <div class="input-group mb-3">
+                       <div class="input-group-prepend">
+                            <button class="btn btn-outline-light btn-sm" id="minus-btn" type="button"><i class="fa fa-minus"></i></button>
+                        </div>
+                       {{ booking_form.number_of_guests }}
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-light btn-sm" id="plus-btn" type="button"><i class="fa fa-plus"></i></button>
+                        </div>
+                   </div>
+               </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col text-white">
+                    Price
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col text-white">
+                   <label id="label_price">$ 0</label>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer border-0 bg-transparent">
+              <div class="container d-flex justify-content-center p-0">
+                  <button type="submit" class="btn book-btn book w-100">Book</button>
+              </div>
+       </div>
+            </form>
+    </div>
+</div>
+</div>
+        <hr class="col-xs-12 m-3">
+<div class="row m-3">
+    <div class="col ml-1">
+        <strong class="mr-2">Best Time To Visit </strong>
+        <label style="color: #00bcd4" class="lead">{{ best_time }}</label>
+    </div>
+</div>
+        <hr class="col-xs-12 m-3">
+
+<div class="row m-3">
+    <div class="col ml-1">
+        <strong class="mr-2">Amenities </strong>
+        <label class="text-justify lead" style="color: #00bcd4">{{ listing.cleaned_amenities }}</label>
+    </div>
+</div>
+        <hr class="col-xs-12 m-3">
+
+<div class="row m-3">
+    <div class="col-4 ml-1">
+        <strong >Availability</strong>
+
+        <div style="overflow:hidden;">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-8 m-5">
+                        <div id="availability_dates"></div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </div>
+    <div class="col-7">
+        <strong>Popularity Trend</strong>
+        <br/>
+        <div class="m-3">
+        <canvas id="bar_chart"></canvas>
+        </div>
+    </div>
+</div>
+        <hr class="col-xs-12 m-3">
+
+<div class="row m-3">
+    <div class="col">
+        <strong>Monthly Price Trend</strong>
+        <br/>
+        <div class="m-5">
+        <canvas id="line_chart"></canvas>
+        </div>
+    </div>
+</div>
+        <hr class="col-xs-12 m-3">
+
+<div class="row m-3">
+    <div class="col ml-1">
+        <strong class="mr-2">Cancellation Policy </strong>
+        <label class="text-justify">{{ listing.cancellation_policy }}</label>
+    </div>
+</div>
+        <hr class="col-xs-12 m-3">
+
+<div class="row m-3">
+    <div class="col ml-1">
+        <strong class="mr-2">House Rules </strong>
+        <label class="text-justify">{{ listing.house_rules }}</label>
+    </div>
+</div>
+        <hr class="col-xs-12 m-3">
+
+<div class="row m-3">
+    <div class="col">
+        <strong>Reviews</strong>
+        <div id="reviews-container">
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block alert %}
+    {% for error in booking_form.non_field_errors %}
+    <div class="fixed-top m-1">
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert"> x </button>
+            {{ error }}
+        </div>
+    </div>
+    {% endfor %}
+    {% for key, value in booking_form.errors.items %}
+    <div class="fixed-top m-1">
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert"> x </button>
+            <strong>{{ key|escape }} : {{ value|escape }}</strong>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

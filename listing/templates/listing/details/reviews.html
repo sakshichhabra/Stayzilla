@@ -1,0 +1,25 @@
+{% for review in reviews %}
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col">
+                    <span class="lead">{{ review.reviewer_name }}</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span style="color: rgba(48,48,48,0.72)">{{ review.date|date:"F Y"  }}</span>
+                </div>
+            </div>
+            <div class="row">
+            <div class="col">
+                <p class="text-justify">
+                    {{ review.comments }}
+                </p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <hr class="col-xs-12">
+{% endfor %}
+

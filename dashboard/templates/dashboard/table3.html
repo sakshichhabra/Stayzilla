@@ -1,0 +1,24 @@
+{#<table class="table-bordered " xmlns:padding="http://www.w3.org/1999/xhtml">#}
+<thead >
+    <tr style="background-color:black; color: white">
+      <th  style="width: 200px" class ="text-center">Table name</th>
+        <th class="text-center" style="width: 200px"> Database count</th>
+
+    </tr>
+</thead>
+<tbody style="height: 200px">
+{% for data in info_data %}
+<tr >
+      <td class=" text-center">
+          {{ data.name}}
+      </td>
+      <td class=" text-center">
+          {{ data.count}}
+      </td>
+
+</tr>
+
+{% endfor %}
+</tbody>
+
+{#</table>#}

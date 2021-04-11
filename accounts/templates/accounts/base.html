@@ -1,0 +1,28 @@
+{% load bootstrap4 %}
+{% load static %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Student Tool
+        {% endblock %}
+    </title>
+
+    <link href="{% static "stylesheets/accounts.css" %}" rel="stylesheet">
+{#    <link href="{% static "stylesheets/signup.css" %}" rel="stylesheet">#}
+
+</head>
+<body class="text-center">
+        {% block content %}
+        {%  endblock %}
+
+        {% block alert %}
+        {% endblock %}
+</body>
+</html>

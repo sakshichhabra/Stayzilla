@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Admin Dashboard
+{% endblock %}
+
+{% block scripts %}
+    {%  include 'dashboard/js.html' %}
+{% endblock %}
+
+{% block stylesheets %}
+    {%  include 'dashboard/css.html' %}
+{% endblock %}
+
+{% block navbar_title %}
+        <p class="navbar-nav mr-auto text-white lead">Admin : {{ user.first_name }} {{ user.last_name }}</p>
+{% endblock %}
+
+{% block content %}
+  <div class="container container-fluid shadow" style="padding: 50px; margin-top: 50px; border-radius: 10px">
+    <div class='row'>
+         <div class="col-sm-6">
+              <h3 class="text-center m-2">Average Price Per Listing</h3>
+                <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle mr-2" type="button" id="state1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    State
+                </button>
+                   <div id="state_list1" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+                   </div>
+                </div>
+              <canvas id="myChart"></canvas>
+          </div>
+          <div class="col-sm-6">
+            <h3 align="center"> Percent Bookings </h3>
+            <table id="myTable" border="1" class="table" style="flex: content-box"></table>
+
+          </div>
+    </div>
+  </div>
+    <div class="container container-fluid shadow" style="margin-top: 25px; border-radius: 10px">
+
+          <div class="row ">
+              <div class="col text-center" >
+                  <h3 class="text-center m-2"> Room Details </h3>
+              </div>
+          </div>
+          <div class='row row-flex'>
+              <div class="col-sm-4 p-5 text-justify"> You can see the room statistics! All the listings are either single rooms that can be shared or used privately. The remaining listings are condos or apartments that are entirely available for use.</div>
+            <div class="col-sm" align="center">
+              <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle mr-2" type="button" id="state2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    state
+                </button>
+                <div id="state_list2" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+                </div>
+              </div>
+
+                  <canvas id="pieChart"></canvas>
+           </div>
+          </div>
+          <div class='row' align="center" style="padding: 100px">
+          <table id="Table2" border="1"></table>
+          </div>
+
+     </div>
+    <div class="container container-fluid shadow" style="padding: 50px; margin-top: 25px; margin-bottom: 25px; border-radius: 10px">
+
+          <div class="row row-flex">
+           <div class="col-sm-12" align="center">
+              <h3 align="center"> Profits </h3>
+           </div>
+          </div>
+          <div class='row row-flex'>
+              <div class="col-sm-6">
+                   <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle mr-2" type="button" id="state3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    state
+                </button>
+                <div id="state_list3" class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu">
+                </div>
+                   </div>
+                <canvas id="chart3" width="20" height="10"></canvas>
+
+          </div>
+              <div class="col-sm-6" align="center">
+               <table id="Table3" border="1" class="table" style="flex: auto; margin-top: 15px"></table>
+              </div>
+          </div>
+    </div>
+{%  endblock content %}

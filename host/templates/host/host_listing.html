@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Become A Host
+{% endblock title %}
+
+{% block stylesheets %}
+    {% include 'host/css.html' %}
+{% endblock stylesheets %}
+
+{% block scripts %}
+    {% include 'host/js.html' %}
+{% endblock scripts %}
+
+
+{% block navbar_title %}
+    <p class="navbar-nav mr-auto text-white lead">Start by adding a new listing</p>
+{% endblock navbar_title %}
+
+{% block content %}
+<div class="nav-scroller">
+        <form action="{% url 'host:host'  %}" method="post">
+            {% csrf_token %}
+             {% for field in form %}
+                {{ field }}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-block mt-2 mb-2">Submit</button>
+        </form>
+</div>
+{% endblock content %}
+
+{% block alert %}
+    {% for error in form.non_field_errors %}
+    <div class="fixed-top m-1">
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert"> x </button>
+            {{ error }}
+        </div>
+    </div>
+    {% endfor %}
+    {% for key, value in form.errors.items %}
+    <div class="fixed-top m-1">
+        <div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert"> x </button>
+            <strong>{{ key|escape }} : {{ value|escape }}</strong>
+        </div>
+    </div>
+    {% endfor %}
+{% endblock alert %}

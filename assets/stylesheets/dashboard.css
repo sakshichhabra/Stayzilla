@@ -1,0 +1,13 @@
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+    background-color: #eeeeee;
+}
+
+.navbar-nav li a {
+ line-height: 34px;
+}
+
+.container{
+    background: white !important;
+}

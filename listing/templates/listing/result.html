@@ -1,0 +1,85 @@
+{% extends "listing/base/base.html" %}
+{% load static %}
+
+ <link href="{% static "stylesheets/result.css" %}" rel="stylesheet">
+
+{% block navbar_title %}
+    <p class="navbar-nav mr-auto text-white lead">{{ city|capfirst }}</p>
+{% endblock %}
+
+{% block content %}
+
+<div class="nav-scroller shadow row">
+<ul class="list-inline m-2">
+
+      <li class="nav-item dropdown active " style="text-align: initial; margin-right: 20px">
+        <a class="btn dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Price
+        </a>
+        <div class="dropdown-menu" aria-labelledby="">
+          <a class="dropdown-item" href="{% url "listing:filter" "100" %}">Less than $100</a>
+          <a class="dropdown-item" href="{% url "listing:filter" "200" %}">Under 200</a>
+            <a class="dropdown-item" href="{% url "listing:filter" "500" %}">Under 500</a>
+            <a class="dropdown-item" href="{% url "listing:filter" "1000" %}">Under 1000</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown active " style="text-align: initial; margin-left: 20px">
+        <a class="btn dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+          Ratings
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{% url "listing:score" "4" %}">4 star and above</a>
+          <a class="dropdown-item" href="{% url "listing:score" "3" %}">3 star and above</a>
+            <a class="dropdown-item" href="{% url "listing:score" "2" %}">2 star and above</a>
+            <a class="dropdown-item" href="{% url "listing:score" "1" %}">1 star and above</a>
+        </div>
+      </li>
+        <li>
+             <a href= "{% url "listing:results" %}">
+                 <button type="button" class="btn btn-link" style="text-align: initial; margin-left: 20px">Clear Filters</button>
+             </a>
+        </li>
+
+
+    </ul>
+
+</div>
+{#     style="width: 100%" width: 100%" }##}
+{#    style="justify-content: space-between#}
+
+    <div class="row m-5 justify-content-center">
+       {%  if listings %}
+         {% for listing in listings %}
+
+             <div class="card ml-2 mr-2 mb-5" style="width: 18rem;">
+              <img class="card-img-top" src={{ listing.picture_url }}>
+                 <div class="card-body">
+                     <h5 class="card-title">{{ listing.name }}</h5>
+                     <p class="card-text">{{ listing.description }}</p>
+                     <p class="card-text">${{ listing.price }}</p>
+                 </div>
+             <div class="card-body">
+                 {% for i in i|rjust:5 %}
+                        {% if forloop.counter <= listing.score %}
+                            <span class="fa fa-star checked "></span>
+                        {% else %}
+                            <span class="fa fa-star "></span>
+                        {% endif %}
+                    {% endfor %}
+             </div>
+             <div class="card-footer">
+                <a href="{% url "listing:details" listing.id %}" class="card-link">See Details</a>
+            </div>
+             </div>
+
+        {% endfor %}
+    {% else %}
+        <h2> No Listings found</h2>
+    {% endif %}
+
+    </div>
+
+
+
+
+{% endblock %}

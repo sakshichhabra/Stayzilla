@@ -1,0 +1,21 @@
+{#<table class="table-bordered" style="column-fill: auto" xmlns:padding="http://www.w3.org/1999/xhtml">#}
+<thead class="thead-dark">
+    <tr>
+      <th  style="width: 88%" class ="text-center">State</th>
+        <th class="text-center">Percent</th>
+    </tr>
+</thead>
+<tbody style="height: 200px">
+{% for data in location_data %}
+<tr>
+      <td class=" text-center">
+          {{ data.STATE}}
+      </td>
+      <td class=" text-center">
+          {{ data.PERCENT}}
+      </td>
+</tr>
+
+{% endfor %}
+</tbody>
+</table>

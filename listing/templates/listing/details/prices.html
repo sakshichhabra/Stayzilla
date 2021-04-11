@@ -1,0 +1,37 @@
+ <ul class="mb-1 nopadding" style="list-style-type: none;">
+    {% for dict_price in prices %}
+        <li class="page-item">
+            <div class="card ml-1 mr-1 text-center" >
+                <div class="card-header">
+                    {{ dict_price.date }}
+                </div>
+                <div class="card-body">
+                    <p class="card-text" style="color: gray">
+                        {% if dict_price.price == 0 %}
+                            No Data
+                        {% else %}
+                            $ {{ dict_price.price }}
+                        {% endif %}
+                    </p>
+                    {% if dict_price.price == 0 or dict_price.price > dict_price.current_price %}
+                         <p class="card-text" style="color: green">
+                            {% if dict_price.current_price == 0 %}
+                                No Data
+                            {% else %}
+                                $ {{ dict_price.current_price }}
+                            {% endif %}
+                        </p>
+                    {% else %}
+                         <p class="card-text" style="color: red">
+                            {% if dict_price.current_price == 0 %}
+                                No Data
+                            {% else %}
+                                $ {{ dict_price.current_price }}
+                            {% endif %}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </li>
+      {% endfor %}
+</ul>

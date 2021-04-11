@@ -1,0 +1,21 @@
+{#<table class="table-bordered" style="column-fill: auto; border-color: black" xmlns:padding="http://www.w3.org/1999/xhtml">#}
+<thead class="thead-dark">
+    <tr class="border" style="background-color:black; color: white; border-color: black" >
+      <th style="width: 800px" class ="text-center">Parameter</th>
+        <th class="text-center" style="width: 800px">Value</th>
+    </tr>
+</thead>
+<tbody style="height: 200px">
+{% for data in table2_data %}
+<tr style="height: 36px">
+      <td class=" text-center">
+          {{ data.parameter }}
+      </td>
+      <td class=" text-center">
+          {{ data.values }}
+      </td>
+</tr>
+
+{% endfor %}
+</tbody>
+{#</table>#}

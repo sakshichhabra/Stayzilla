@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Confirmed
+{% endblock title %}
+
+{% block stylesheets %}
+    {% include 'host/css.html' %}
+{% endblock stylesheets %}
+
+{% block scripts %}
+    {% include 'host/js.html' %}
+{% endblock %}
+
+{% block navbar_title %}
+    <p class="navbar-nav mr-auto text-white lead">Listing Added</p>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid justify-content-center align-items-center">
+    <h3 class="text-center mt-5"> Thank you! <br/> Your listing has been added. Be ready to host!</h3>
+</div>
+{% endblock %}

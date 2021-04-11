@@ -1,0 +1,341 @@
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+<script>
+
+let date_format = 'DD-MMM-YY';
+let listing_id = {{ listing.id }};
+
+var barChart, lineChart;
+var available_dates_with_price;
+
+$(document).ready(function(){
+
+    set_date_pickers();
+    set_guest_counter();
+
+    load_popularity_trend();
+    load_price_trend();
+    load_reviews();
+
+    update_price();
+
+    load_past_price_trend();
+    load_future_price_trend();
+ });
+
+function set_date_pickers(){
+
+    let dict_dates = {{ dict_dates|safe }};
+    let check_in = dict_dates.check_in;
+    let check_out = dict_dates.check_out;
+    available_dates_with_price = dict_dates.available_dates_with_price;
+
+    let check_in_date = moment(check_in, date_format).toDate();
+    let check_out_date = moment(check_out, date_format).toDate();
+
+    let enabled_moments = [];
+
+    for (i in available_dates_with_price){
+
+        let dict = available_dates_with_price[i];
+        let date = moment(dict.date, date_format).toDate();
+        enabled_moments.push(date)
+    }
+
+    let today = moment().startOf('day')
+
+    $('#availability_dates').datetimepicker({
+        inline: true,
+        format: date_format,
+        enabledDates: enabled_moments,
+        minDate: today
+    });
+
+    $('#id_check_in').datetimepicker({
+        format: date_format,
+        enabledDates: enabled_moments,
+        minDate: today,
+        date: check_in_date
+    }).on('dp.change', function (e) {
+        update_price();
+        load_past_price_trend();
+    });
+
+    $("#check-in-div").click(function(){ $("#id_check_in").datetimepicker("show"); });
+
+    $('#id_check_out').datetimepicker({
+        format: date_format,
+        enabledDates: enabled_moments,
+        minDate: today,
+        date: check_out_date
+    }).on('dp.change', function (e) {
+        update_price();
+        load_future_price_trend();
+    });;
+
+    $("#check-out-div").click(function(){ $("#id_check_out").datetimepicker("show"); });
+}
+
+function set_guest_counter() {
+    {#$('#id_number_of_guests').prop('disabled', true);#}
+
+    $('#plus-btn').click(function(){
+    	$('#id_number_of_guests').val(parseInt($('#id_number_of_guests').val()) + 1 );
+    	update_price();
+    	    });
+        $('#minus-btn').click(function(){
+    	$('#id_number_of_guests').val(parseInt($('#id_number_of_guests').val()) - 1 );
+    	update_price();
+    	//if ($('#id_number_of_guests').val() == 0) {
+		//	$('#id_number_of_guests').val(1);
+		//}
+
+    });
+}
+
+function load_popularity_trend(){
+
+    $.ajax({
+        data: {'listing_id': listing_id },
+        method: "GET",
+        url: "{%  url "listing:popularity-data"  %}",
+        success: function(data){
+            setBarChart(data);
+        },
+        error: function(error_data){
+
+            barChart.destroy();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+}
+
+function load_price_trend(){
+
+    $.ajax({
+        data: {'listing_id': listing_id },
+        method: "GET",
+        url: "{%  url "listing:price-data"  %}",
+        success: function(data){
+            setLineChart(data);
+        },
+        error: function(error_data){
+
+            barChart.destroy();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+}
+
+function setBarChart(data){
+
+     if(barChart)
+    {
+        barChart.destroy()
+    }
+
+    let ctx = document.getElementById("bar_chart").getContext('2d');
+    barChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.months,
+            datasets: [{
+                label: '',
+                data: data.values,
+                backgroundColor: 'rgba(0, 188, 212, 0.5)',
+                borderColor: 'rgba(0, 188, 212, 1)',
+                borderWidth: 1
+            }],
+        },
+        options: {
+                responsive: true,
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Month'
+                            },
+                        gridLines: {
+                                display:false
+                            }
+                        }],
+                    yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                stepValue: 1,
+                            },
+                        gridLines: {
+                                    display:false
+                                }
+                        }]
+                }
+            }
+
+    });
+}
+
+function load_reviews() {
+    $.ajax({
+        data: {'listing_id': listing_id },
+        method: "GET",
+        url: "{%  url "listing:review-data"  %}",
+        success: function(data){
+            {#console.log(data)#}
+
+            $('#reviews-container').empty();
+            $('#reviews-container').append(data)
+        },
+        error: function(error_data){
+
+            $('#reflections_table').empty();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+}
+
+function update_price(){
+
+    let guests = $('#id_number_of_guests').val();
+    var price = 0;
+
+    if (guests > 0){
+
+        let check_in = $('#id_check_in').val();
+        let check_out = $('#id_check_out').val();
+
+        let check_in_date = moment(check_in, date_format).toDate();
+        let check_out_date = moment(check_out, date_format).toDate();
+
+        if(check_out_date > check_in_date){
+
+            for (i in available_dates_with_price){
+
+                let dict = available_dates_with_price[i];
+                let date = moment(dict.date, date_format).toDate();
+
+                if(date >= check_in_date && date <= check_out_date){
+
+                    price += dict.price;
+                }
+            }
+        }
+
+        price = price * guests;
+    }
+
+    $('#id_price').val(price);
+    $('#label_price').text('$ '+price);
+
+}
+
+function setLineChart(data){
+
+    if(lineChart)
+    {
+        lineChart.destroy()
+    }
+
+    let ctx = document.getElementById("line_chart").getContext('2d');
+    barChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.months,
+            datasets: [{
+                label: '',
+                data: data.prices,
+                backgroundColor: 'transparent',
+                borderColor: 'rgba(0, 188, 212, 1)',
+                borderWidth: 2
+            }],
+        },
+        options: {
+                responsive: true,
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Month'
+                            },
+                        gridLines: {
+                                display:false
+                            }
+                        }],
+                    yAxes: [{
+                            display: true,
+                            ticks: {
+                                beginAtZero: true,
+                                stepValue: 1,
+                            },
+                        gridLines: {
+                                    display:false
+                                }
+                        }]
+                }
+            }
+
+    });
+}
+
+function load_past_price_trend(){
+
+    let start_date = $('#id_check_in').val();
+
+    $.ajax({
+        data: {'listing_id': listing_id, 'date': start_date},
+        method: "GET",
+        url: "{%  url "listing:past-price-data"  %}",
+        success: function(data){
+
+            $('#past_price_trend_container').empty();
+            $('#past_price_trend_container').append(data);
+        },
+        error: function(error_data){
+
+            $('#past_price_trend_container').empty();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+}
+
+function load_future_price_trend(){
+
+    let end_date = $('#id_check_out').val();
+
+    $.ajax({
+        data: {'listing_id': listing_id, 'date': end_date},
+        method: "GET",
+        url: "{%  url "listing:future-price-data"  %}",
+        success: function(data){
+            console.log(data);
+
+            $('#future_price_trend_container').empty();
+            $('#future_price_trend_container').append(data);
+        },
+        error: function(error_data){
+
+            $('#future_price_trend_container').empty();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    })
+}
+
+</script>

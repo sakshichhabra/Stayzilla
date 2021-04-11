@@ -1,0 +1,113 @@
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+
+.navbar-nav li a {
+ line-height: 34px;
+}
+
+.form-control{
+    margin: 5px 5px 5px 5px;
+}
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot');
+    src: url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+     url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2') format('woff2'),
+     url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff') format('woff'),
+     url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.ttf') format('truetype'),
+     url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
+
+.glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.glyphicon-time:before {
+    content: "\e023";
+}
+
+.glyphicon-chevron-left:before {
+    content: "\e079";
+}
+
+.glyphicon-chevron-right:before {
+    content: "\e080";
+}
+
+.glyphicon-chevron-up:before {
+    content: "\e113";
+}
+
+.glyphicon-chevron-down:before {
+    content: "\e114";
+}
+
+.glyphicon-calendar:before {
+    content: "\e109";
+}
+
+.glyphicon-screenshot:before {
+    content: "\e087";
+}
+
+.glyphicon-trash:before {
+    content: "\e020";
+}
+
+.glyphicon-remove:before {
+    content: "\e014";
+}
+
+.bootstrap-datetimepicker-widget.dropdown-menu {
+    position: absolute;
+    left: 0;
+    z-index: 1000;
+    display: flow;
+    float: left;
+    min-width: 160px;
+    padding: 5px 0;
+    margin: 2px 0 0 2px;
+    font-size: 14px;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+}
+
+.bootstrap-datetimepicker-widget .list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+
+.bootstrap-datetimepicker-widget .collapse {
+    display: none;
+}
+
+.bootstrap-datetimepicker-widget .collapse.in {
+    display: block;
+}
+
+/* fix for bootstrap4 */
+.bootstrap-datetimepicker-widget .table-condensed > thead > tr > th,
+.bootstrap-datetimepicker-widget .table-condensed > tbody > tr > td,
+.bootstrap-datetimepicker-widget .table-condensed > tfoot > tr > td {
+    padding: 5px;
+
+}

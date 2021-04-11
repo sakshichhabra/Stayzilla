@@ -1,0 +1,382 @@
+{% load bootstrap4 %}
+{% bootstrap_javascript jquery='full' %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+
+<script>
+
+var state_data;
+var selected_state1 = 0;
+var selected_state2 = 0;
+var selected_state3 = 0;
+var barChart;
+var pieChart1;
+var pieChart2;
+
+$(document).ready(function(){
+
+    console.log("Ready");
+    init()
+
+    loadBarChart();
+    loadPieChart();
+    loadHostChart();
+    loadTable1();
+    loadTable2();
+    loadTable3();
+
+    menuListener();
+    setStateMenu1();
+    setStateMenu2();
+    setStateMenu3();
+})
+
+function init(){
+
+    state_data = {{ all_states | safe }};
+
+    if(selected_state1 == 0){
+
+        selected_state1 = state_data[0];
+    }
+
+    if(selected_state2 ==0){
+
+        selected_state2 = state_data[0];
+    }
+    if(selected_state3 ==0){
+        selected_state3 = state_data[0];
+    }
+}
+
+function loadBarChart(){
+
+    let endpoint = '/dashboard/chart/data';
+
+    $.ajax({
+        data: {'selected_state': selected_state1},
+        method:"GET",
+        url: endpoint,
+        success: function(data){
+            setBarChart(data);
+        },
+        error: function(error_data){
+            console.log("my chart error");
+            console.log(error_data);
+        }
+        })
+}
+
+function setBarChart(data){
+
+    if(barChart)
+    {
+        barChart.destroy()
+    }
+
+    console.log(data);
+     var ctx = document.getElementById('myChart').getContext('2d');
+     barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: data.months,
+                datasets: [{
+                    label: selected_state1,
+                    data: data.bookings,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+
+                        }
+                    }]
+                }
+            }
+        });
+}
+
+function loadPieChart(){
+
+    let endpoint = "{%  url "dashboard:pie_graph"  %}";
+
+    $.ajax({
+        data: {'selected_state': selected_state2},
+        method:"GET",
+        url: endpoint,
+        success: function(pie_data){
+
+            setPieChart(pie_data);
+        },
+        error: function(error_data){
+            console.log("pie chart error");
+            console.log(error_data);
+        }
+        })
+}
+
+function setPieChart(data){
+    if(pieChart1)
+    {
+        pieChart1.destroy()
+    }
+     var ctx = document.getElementById('pieChart').getContext('2d');
+         pieChart1 = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'shared room',
+                    data: data.data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+
+                    ]
+                }]
+            }
+        });
+}
+
+function loadHostChart(){
+
+    let endpoint = "{%  url "dashboard:chart3_data"  %}";
+
+    $.ajax({
+        data: {'selected_state': selected_state3},
+        method:"GET",
+        url: endpoint,
+        success: function(chart3_data){
+            setHostPieChart(chart3_data);
+        },
+        error: function(error_data){
+            console.log("chart 3 error");
+            console.log(error_data);
+        }
+    });
+}
+
+function setHostPieChart(data){
+     var ctx = document.getElementById('chart3').getContext('2d');
+     if(pieChart2)
+    {
+     pieChart2.destroy()
+    }
+        pieChart2 = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: data.label,
+                datasets: [{
+                    label: 'shared room',
+                    data: data.data,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+
+                    ],
+                    borderWidth: 1,
+                    radius:  "100%"
+                }]
+            }
+        });
+}
+
+function loadTable1(){
+
+    var endpoint = "{%  url "dashboard:table_data"  %}";
+
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (body) {
+            $('#myTable').empty();
+            $('#myTable').append(body);
+        },
+        error: function (error_data) {
+
+            $('#myTable').empty();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    });
+}
+
+function loadTable2(){
+    let endpoint = "{%  url "dashboard:table2_data"  %}";
+
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (body) {
+            console.log(body)
+            $('#Table2').empty();
+            $('#Table2').append(body);
+        },
+        error: function (error_data) {
+
+            $('#Table2').empty();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    });
+}
+
+function loadTable3(){
+    let endpoint = "{%  url "dashboard:table3_data"  %}";
+
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (body) {
+            $('#Table3').empty();
+            $('#Table3').append(body);
+
+        },
+        error: function (error_data) {
+
+            $('#Table3').empty();
+
+            console.log("error")
+            console.log(error_data)
+        }
+    });
+}
+
+function menuListener(){
+
+     $("body").on('click', '.dropdown-menu.dropdown-menu-right button', function () {
+
+        let type = $(this).data("type");
+
+        if (type == "state1"){
+
+            selected_state1 = $(this).data("id");
+
+            loadBarChart()
+            setStateMenu1()
+        }
+        else if(type == "state2"){
+            selected_state2 = $(this).data("id");
+
+            loadPieChart()
+            setStateMenu2()
+        }
+        else if(type == "state3"){
+            selected_state3 = $(this).data("id");
+
+            loadHostChart()
+            setStateMenu3()
+        }
+
+    });
+}
+
+function setStateMenu1(){
+
+    $('#state_list1').empty() //EmptyList
+
+    $('#state1').text(selected_state1);
+
+    for(index in state_data){
+
+        if (selected_state1 == state_data[index]){
+
+            $('#state_list1').append('<button class="dropdown-item active" type="button" data-id="'+state_data[index]+'" data-type="state1">'+state_data[index]+'</button>')
+        }
+        else
+        {
+            $('#state_list1').append('<button class="dropdown-item" type="button" data-id="'+state_data[index]+'" data-type="state1">'+state_data[index]+'</button>')
+        }
+    }
+
+}
+
+function setStateMenu2(){
+
+    $('#state_list2').empty() //EmptyList
+
+    $('#state2').text(selected_state2);
+
+    for(index in state_data){
+
+        if (selected_state2 == state_data[index]){
+
+            $('#state_list2').append('<button class="dropdown-item active" type="button" data-id="'+state_data[index]+'" data-type="state2">'+state_data[index]+'</button>')
+        }
+        else
+        {
+            $('#state_list2').append('<button class="dropdown-item" type="button" data-id="'+state_data[index]+'" data-type="state2">'+state_data[index]+'</button>')
+        }
+    }
+
+}
+
+function setStateMenu3(){
+
+    $('#state_list3').empty() //EmptyList
+
+    $('#state3').text(selected_state3);
+
+    for(index in state_data){
+
+        if (selected_state3 == state_data[index]){
+
+            $('#state_list3').append('<button class="dropdown-item active" type="button" data-id="'+state_data[index]+'" data-type="state3">'+state_data[index]+'</button>')
+        }
+        else
+        {
+            $('#state_list3').append('<button class="dropdown-item" type="button" data-id="'+state_data[index]+'" data-type="state3">'+state_data[index]+'</button>')
+        }
+    }
+
+}
+
+</script>
